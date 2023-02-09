@@ -1,0 +1,25 @@
+{
+  "name": "angular-clone",
+  "version": "1.0.0",
+  "description": "Trying to build angular from scratch",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mazouakh/angular-clone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mazouakh/angular-clone/issues"
+  },
+  "homepage": "https://github.com/mazouakh/angular-clone#readme",
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "vite": "^4.1.1"
+  }
+}
