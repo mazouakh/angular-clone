@@ -1,5 +1,7 @@
 export class FormatterService {
-	constructor() {}
+	constructor() {
+		console.log("FormatterService created " + Math.random());
+	}
 
 	formatNumber(value: string, length: number, groupLength: number, willHaveSpaces = true): string {
 		// replace anything that is not a number with an empty string.

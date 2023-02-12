@@ -3,9 +3,7 @@ import { FormatterService } from "../services/formatter.service";
 export class CreditCardDirective {
 	static selector: string = "[credit-card]";
 
-	formatter: FormatterService = new FormatterService();
-
-	constructor(public element: HTMLElement) {}
+	constructor(public element: HTMLElement, private formatter: FormatterService) {}
 
 	formatCreditCardNumber(element: HTMLInputElement) {
 		element.value = this.formatter.formatNumber(element.value, 16, 4, true);
