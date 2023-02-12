@@ -7,7 +7,15 @@ import { FormatterService } from "./services/formatter.service";
 // list of directives used in the app
 const directives = [PhoneNumberDirective, CreditCardDirective];
 
-const formatter: FormatterService = new FormatterService();
+// List of providers that will provide a way to construct instances of services to be injected when needed
+// TODO: this is a temporary solution to be able to inject services in the constructor of the directive
+// see if there is a better way to do this by conmparing with the type of the class rather than the name of the parameter
+const providers = [
+	{
+		provide: "formatter",
+		construct: () => new FormatterService(),
+	},
+];
 
 directives.forEach((directive) => {
 	// select all HTML elements on the page that have as an attribute the directive's selector
@@ -17,7 +25,7 @@ directives.forEach((directive) => {
 			// On analyse les paramètres du constructeur de la directive et
 			// on les récupère
 			const params = analyseDirectiveConstructor(directive, element);
-			// Using the Reflext API, create a new instance of the directive and pass the appropriate parameters
+			// Using the Reflect API, create a new instance of the directive and pass the appropriate parameters
 			const directiveInstance = Reflect.construct(directive, params);
 			// then call the init function
 			directiveInstance.init();
@@ -45,13 +53,18 @@ function analyseDirectiveConstructor(directive, element: HTMLElement) {
 		if (name === "element") {
 			return element;
 		}
-		// Si le nom est "formatter", alors on donne une instance du service formatter
-		if (name === "formatter") {
-			return formatter;
+
+		// Sinon ça doit surment etre un service à injecter
+		// On verifie si on un un provider qui peut nous fournir ce service et on retourne une instance
+		// de ce dernier
+		const provider = providers.find((p) => p.provide === name);
+		if (!provider) {
+			throw new Error("There is no provider defined for the service " + name);
 		}
+		return provider.construct();
 	});
 
-	// On retourne un liste des instances de parametres/service à injecter
+	// On retourne une liste des instances de parametres/service à injecter
 	return params;
 }
 
