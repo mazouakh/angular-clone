@@ -1,23 +1,22 @@
+import { FormatterService } from "../services/formatter.service";
+
 export class PhoneNumberDirective {
 	static selector: string = "[phone-number]";
+	static providers = [
+		{
+			provide: "formatter",
+			construct: () => new FormatterService("phone formatter"),
+		},
+	];
 
 	willHaveSpaces: boolean = true;
 	borderColor: string = "blue";
 
-	constructor(public element: HTMLElement) {}
+	constructor(public element: HTMLElement, private formatter: FormatterService) {}
 
 	// create a function that formats the phone number in the input field.
 	formatPhoneNumber(element: HTMLInputElement) {
-		// replace anything that is not a number with an empty string.
-		let formatedNumber = element.value.replace(/[^\d]/g, "");
-		// limit the length of the phone number to 10 characters.
-		formatedNumber = formatedNumber.length > 10 ? formatedNumber.slice(0, 10) : formatedNumber;
-		// put a space between two numbers
-		const numbersGroups: string[] = [];
-		for (let i = 0; i < formatedNumber.length; i += 2) {
-			numbersGroups.push(formatedNumber.slice(i, i + 2));
-		}
-		element.value = numbersGroups.join(this.willHaveSpaces ? " " : "");
+		element.value = this.formatter.formatNumber(element.value, 10, 2, this.willHaveSpaces);
 	}
 
 	// create init function
