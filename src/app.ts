@@ -13,7 +13,7 @@ const directives = [PhoneNumberDirective, CreditCardDirective];
 const providers = [
 	{
 		provide: "formatter",
-		construct: () => new FormatterService(),
+		construct: () => new FormatterService("generic formatter"),
 	},
 ];
 
@@ -55,7 +55,19 @@ function analyseDirectiveConstructor(directive, element: HTMLElement) {
 		if (name === "element") {
 			return element;
 		}
+
 		// Sinon ça doit surment etre un service à injecter
+
+		// On verifie d'abord si cette directive a un provider spécifique pour ce service
+		const directiveProviders = directive.providers || [];
+		const directiveProvider = directiveProviders.find((provider) => provider.provide === name);
+		// Si c'est le cas, on créer une instance de ce service avec le constructeur defini dans ce provider
+		// et on ne l'enregistre pas dans la liste des services car c'est un service spécifique à cette directive seulements
+		if (directiveProvider) {
+			return directiveProvider.construct();
+		}
+
+		// Si on a pas de provider specifique dans la directive, alors on tante d'utiliser le provider global
 		// On verifie si un service de ce nom a deja été instancié
 		const service = services.find((service) => service.name === name);
 		if (service) {

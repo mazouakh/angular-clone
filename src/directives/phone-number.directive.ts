@@ -2,6 +2,12 @@ import { FormatterService } from "../services/formatter.service";
 
 export class PhoneNumberDirective {
 	static selector: string = "[phone-number]";
+	static providers = [
+		{
+			provide: "formatter",
+			construct: () => new FormatterService("phone formatter"),
+		},
+	];
 
 	willHaveSpaces: boolean = true;
 	borderColor: string = "blue";

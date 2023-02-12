@@ -1,6 +1,6 @@
 export class FormatterService {
-	constructor() {
-		console.log("FormatterService created " + Math.random());
+	constructor(name: string) {
+		console.log("FormatterService created " + name);
 	}
 
 	formatNumber(value: string, length: number, groupLength: number, willHaveSpaces = true): string {
