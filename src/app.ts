@@ -17,6 +17,8 @@ const providers = [
 	},
 ];
 
+const services: { name: string; instance: any }[] = [];
+
 directives.forEach((directive) => {
 	// select all HTML elements on the page that have as an attribute the directive's selector
 	const elements = document.querySelectorAll<HTMLElement>(directive.selector);
@@ -53,15 +55,27 @@ function analyseDirectiveConstructor(directive, element: HTMLElement) {
 		if (name === "element") {
 			return element;
 		}
-
 		// Sinon ça doit surment etre un service à injecter
-		// On verifie si on un un provider qui peut nous fournir ce service et on retourne une instance
-		// de ce dernier
+		// On verifie si un service de ce nom a deja été instancié
+		const service = services.find((service) => service.name === name);
+		if (service) {
+			return service.instance;
+		}
+		// Sinon on crée un service
+		// On verifie si on un un provider qui peut nous fournir ce service et
 		const provider = providers.find((p) => p.provide === name);
 		if (!provider) {
 			throw new Error("There is no provider defined for the service " + name);
 		}
-		return provider.construct();
+		// On crées une instance de ce service
+		const serviceInstance = provider.construct();
+		// On l'ajoute à la liste des services déja instanciés
+		services.push({
+			name: name,
+			instance: serviceInstance,
+		});
+		// On retourne une instance de ce service
+		return serviceInstance;
 	});
 
 	// On retourne une liste des instances de parametres/service à injecter
