@@ -1,10 +1,10 @@
+import { Directive } from "../decorators/directive";
 import { Providers } from "../framework/types";
 import { FormatterService } from "../services/formatter.service";
-
+@Directive({
+	selector: "[credit-card]",
+})
 export class CreditCardDirective {
-	static selector: string = "[credit-card]";
-	static providers: Providers = [];
-
 	constructor(public element: HTMLElement, private formatter: FormatterService) {}
 
 	formatCreditCardNumber(element: HTMLInputElement) {

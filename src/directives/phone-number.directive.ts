@@ -1,15 +1,17 @@
+import { Directive } from "../decorators/directive";
 import { Providers } from "../framework/types";
 import { FormatterService } from "../services/formatter.service";
 
-export class PhoneNumberDirective {
-	static selector: string = "[phone-number]";
-	static providers: Providers = [
+@Directive({
+	selector: "[phone-number]",
+	providers: [
 		{
 			provide: "formatter",
 			construct: () => new FormatterService("phone formatter"),
 		},
-	];
-
+	],
+})
+export class PhoneNumberDirective {
 	willHaveSpaces: boolean = true;
 	borderColor: string = "blue";
 

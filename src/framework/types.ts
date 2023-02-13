@@ -48,3 +48,15 @@ export type Module = {
 	 */
 	providers?: Providers;
 };
+
+export type Directive = {
+	/**
+	 * The selector of the directive
+	 */
+	selector: string;
+
+	/**
+	 * The providers needed to construct the parameters of the directive
+	 */
+	providers?: Providers;
+};
