@@ -1,8 +1,9 @@
+import { Providers } from "../framework/types";
 import { FormatterService } from "../services/formatter.service";
 
 export class PhoneNumberDirective {
 	static selector: string = "[phone-number]";
-	static providers = [
+	static providers: Providers = [
 		{
 			provide: "formatter",
 			construct: () => new FormatterService("phone formatter"),

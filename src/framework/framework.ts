@@ -1,9 +1,11 @@
-import { CreditCardDirective } from "../directives/credit-card.directive";
-import { PhoneNumberDirective } from "../directives/phone-number.directive";
-import { FormatterService } from "../services/formatter.service";
+import { Module, Providers, ServicesInstances } from "./types";
 
 export class Framework {
 	constructor() {}
+
+	/**
+	 * Attributes
+	 */
 
 	/**
 	 * list of directives used in the app
@@ -14,17 +16,21 @@ export class Framework {
 	 * List of providers that will provide a way to construct instances of services to be injected when needed
 	 * TODO: see if there is a better way to do this by comparing with the type of the class rather than the name of the parameter
 	 */
-	providers: { provide: string; construct: Function }[] = [];
+	providers: Providers = [];
 
 	/**
 	 * List of services that will be injected when needed
 	 */
-	services: { name: string; instance: any }[] = [];
+	services: ServicesInstances = [];
+
+	/**
+	 * Public Methods
+	 */
 
 	/**
 	 *Intanciate all directives and plug them into the targeted HTML elements
 	 */
-	bootstrapApplication(metadata: { providers?: any[]; declarations: any[] }) {
+	bootstrapApplication(metadata: Module) {
 		this.providers = metadata.providers || [];
 		this.directives = metadata.declarations;
 		this.directives.forEach((directive) => {
@@ -43,6 +49,10 @@ export class Framework {
 			}
 		});
 	}
+
+	/**
+	 * Private Methods
+	 */
 
 	/**
 	 * Analyse le constructeur d'une directive et nous donne les paramètres

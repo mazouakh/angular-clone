@@ -1,7 +1,9 @@
+import { Providers } from "../framework/types";
 import { FormatterService } from "../services/formatter.service";
 
 export class CreditCardDirective {
 	static selector: string = "[credit-card]";
+	static providers: Providers = [];
 
 	constructor(public element: HTMLElement, private formatter: FormatterService) {}
 
