@@ -1,4 +1,5 @@
 import { Directive } from "../decorators/directive";
+import { HostListener } from "../decorators/host-listener";
 import { Input } from "../decorators/input";
 import { Providers } from "../framework/types";
 import { FormatterService } from "../services/formatter.service";
@@ -21,6 +22,8 @@ export class PhoneNumberDirective {
 
 	constructor(public element: HTMLElement, private formatter: FormatterService) {}
 
+	// add evenent lister on the element for input event
+	@HostListener("input", ["event.target"])
 	// create a function that formats the phone number in the input field.
 	formatPhoneNumber(element: HTMLInputElement) {
 		element.value = this.formatter.formatNumber(element.value, 10, 2, this.willHaveSpaces);
@@ -34,11 +37,10 @@ export class PhoneNumberDirective {
 
 		this.element.style.borderColor = this.borderColor;
 
-		// add evenent lister on the element for input event
-		this.element.addEventListener("input", (event) => {
-			// set the value of that element equalt to the value returned by the formatPhoneNumber function
-			const element = event.target as HTMLInputElement;
-			this.formatPhoneNumber(element);
-		});
+		// // add evenent lister on the element for input event
+		// this.element.addEventListener("input", (event) => {
+		// 	// set the value of that element equalt to the value returned by the formatPhoneNumber function
+		// 	this.formatPhoneNumber(event.target as HTMLInputElement);
+		// });
 	}
 }
