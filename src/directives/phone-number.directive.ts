@@ -1,4 +1,5 @@
 import { Directive } from "../decorators/directive";
+import { Input } from "../decorators/input";
 import { Providers } from "../framework/types";
 import { FormatterService } from "../services/formatter.service";
 
@@ -12,7 +13,10 @@ import { FormatterService } from "../services/formatter.service";
 	],
 })
 export class PhoneNumberDirective {
+	@Input("will-have-spaces")
 	willHaveSpaces: boolean = true;
+
+	@Input("border-color")
 	borderColor: string = "blue";
 
 	constructor(public element: HTMLElement, private formatter: FormatterService) {}
@@ -25,10 +29,11 @@ export class PhoneNumberDirective {
 	// create init function
 	init() {
 		// getting attributes from the element
-		this.willHaveSpaces = this.element.hasAttribute("will-have-spaces") ? this.element.getAttribute("will-have-spaces") === "true" : true;
-		this.borderColor = this.element.hasAttribute("border-color") ? this.element.getAttribute("border-color")! : "blue";
+		// this.willHaveSpaces = this.element.hasAttribute("will-have-spaces") ? this.element.getAttribute("will-have-spaces") === "true" : true;
+		// this.borderColor = this.element.hasAttribute("border-color") ? this.element.getAttribute("border-color")! : "blue";
 
 		this.element.style.borderColor = this.borderColor;
+
 		// add evenent lister on the element for input event
 		this.element.addEventListener("input", (event) => {
 			// set the value of that element equalt to the value returned by the formatPhoneNumber function
