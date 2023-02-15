@@ -1,5 +1,7 @@
 import { Directive } from "../decorators/directive";
-import { Providers } from "../framework/types";
+import { HostBinding } from "../decorators/host-binding";
+import { HostListener } from "../decorators/host-listener";
+import { Input } from "../decorators/input";
 import { FormatterService } from "../services/formatter.service";
 @Directive({
 	selector: "[credit-card]",
@@ -7,15 +9,15 @@ import { FormatterService } from "../services/formatter.service";
 export class CreditCardDirective {
 	constructor(public element: HTMLElement, private formatter: FormatterService) {}
 
+	@HostBinding("style.borderColor")
+	@Input("border-color")
+	borderColor: string = "green";
+
+	@HostBinding("placeholder")
+	placeholder: string = "Credit Card Number";
+
+	@HostListener("input", ["event.target"])
 	formatCreditCardNumber(element: HTMLInputElement) {
 		element.value = this.formatter.formatNumber(element.value, 16, 4, true);
-	}
-
-	init() {
-		this.element.style.borderColor = "red";
-
-		this.element.addEventListener("input", (event) => {
-			this.formatCreditCardNumber(event.target as HTMLInputElement);
-		});
 	}
 }
