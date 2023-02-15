@@ -9,7 +9,7 @@ import { Directive } from "../framework/types";
 export function Directive(Metadata: Directive) {
 	/**
 	 * A decorator is a function that needs to return a function
-	 * the retuned function takes as a parameter the original class the decorator is applied to
+	 * the returned function takes as a parameter the original class the decorator is applied to
 	 */
 	return function (decoratedClass) {
 		/**

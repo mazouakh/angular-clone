@@ -14,7 +14,7 @@ export function Input(attribute: string) {
 			 * for attributes that hold values other than just a string, the convention is to put
 			 * those attributes between brackets
 			 *
-			 * example: [will-have-staces] = "true"
+			 * example: [will-have-spaces] = "true"
 			 */
 			if (this.element.hasAttribute(`[${attribute}]`)) {
 				this[propName] = this.element.getAttribute(`[${attribute}]`) === "true";

@@ -1,3 +1,4 @@
+import set from "lodash/set";
 import { Module, Providers, ServicesInstances } from "./types";
 
 export class Framework {
@@ -43,8 +44,31 @@ export class Framework {
 					const params = this.analyseDirectiveConstructor(directive, element);
 					// Using the Reflect API, create a new instance of the directive and pass the appropriate parameters
 					const directiveInstance: any = Reflect.construct(directive, params);
+
+					// Creating a proxy to the directive to track all the changes
+					const directiveProxy: any = new Proxy(directiveInstance, {
+						set: (target, propName: string, value) => {
+							// The proxy intercepts all the changes to the target object (they don"t happen)
+							// so first we update the property value in the directive instance
+							// as it was intended in the initial call
+							target[propName] = value;
+
+							// check if we have a bindings array
+							if (!directive.bindings) {
+								return true;
+							}
+							// check if that bindings array contains this property
+							const binding = directive.bindings.find((binding) => binding.propName === propName);
+							if (!binding) {
+								return true;
+							}
+							// if it does, then we have a change
+							console.log("changing " + propName + " to " + value);
+							return set(target.element, binding.attrName, value);
+						},
+					});
 					// then call the init function
-					directiveInstance.init();
+					directiveProxy.init();
 				});
 			}
 		});
