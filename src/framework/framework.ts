@@ -1,4 +1,5 @@
 import set from "lodash/set";
+import { Detector } from "./change-detector";
 import { Module, Providers, ServicesInstances } from "./types";
 
 export class Framework {
@@ -63,8 +64,11 @@ export class Framework {
 								return true;
 							}
 							// if it does, then we have a change
-							console.log("changing " + propName + " to " + value);
-							return set(target.element, binding.attrName, value);
+							console.log("Proxy detected a change on ", target.element.tagName, " for property : " + propName + " to new value : " + value);
+							// We send this new value as a binding to the change detector
+							// and let him handle filtering and applying the most recent changes
+							Detector.addBinding(target.element, binding.attrName, value);
+							return true;
 						},
 					});
 					// then call the init function
