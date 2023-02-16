@@ -17,11 +17,6 @@ import { FormatterService } from "../services/formatter.service";
 export class PhoneNumberDirective {
 	constructor(public element: HTMLElement, private formatter: FormatterService) {}
 
-	static bindings: { propName: string; attrName: string }[] = [
-		{ propName: "borderColor", attrName: "style.borderColor" },
-		{ propName: "inputValue", attrName: "value" },
-	];
-
 	@Input("will-have-spaces")
 	willHaveSpaces: boolean = true;
 
@@ -30,6 +25,7 @@ export class PhoneNumberDirective {
 	@Input("border-color") // If you find in as an input int the "border-color" attribute then take that value
 	borderColor: string = "blue"; // default value is "blue"
 
+	// bind this property to the "value" attribute of this element
 	@HostBinding("value")
 	inputValue: string = "";
 

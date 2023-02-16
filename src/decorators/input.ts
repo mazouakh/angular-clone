@@ -1,5 +1,5 @@
 /**
- * Decorator @Input : Allows to get a value from an attribute in the HTML element as an input and
+ * Property Decorator @Input : Allows to get a value from an attribute in the HTML element as an input and
  * stores it in the directive's decorated property.
  *
  * @param attribute The name of the attribute of the HTML element that has the value seeked.

@@ -1,5 +1,5 @@
 /**
- * Decorator @HostListener : Allows to call the decorated method whenever an event is fired.
+ * Method Decorator @HostListener : Allows to call the decorated method whenever an event is fired.
  *
  * @param eventType The type of event to listen for.
  * @param args A list of arguments to pass to the decorated function when the event is fired.

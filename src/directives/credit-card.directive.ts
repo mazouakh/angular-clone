@@ -2,6 +2,7 @@ import { Directive } from "../decorators/directive";
 import { HostBinding } from "../decorators/host-binding";
 import { HostListener } from "../decorators/host-listener";
 import { Input } from "../decorators/input";
+import { Detector } from "../framework/change-detector";
 import { FormatterService } from "../services/formatter.service";
 @Directive({
 	selector: "[credit-card]",
@@ -16,8 +17,12 @@ export class CreditCardDirective {
 	@HostBinding("placeholder")
 	placeholder: string = "Credit Card Number";
 
-	@HostListener("input", ["event.target"])
-	formatCreditCardNumber(element: HTMLInputElement) {
-		element.value = this.formatter.formatNumber(element.value, 16, 4, true);
+	@HostBinding("value")
+	inputValue: string = "";
+
+	@HostListener("input", ["event.target.value"])
+	formatCreditCardNumber(value: string) {
+		this.inputValue = this.formatter.formatNumber(value, 16, 4, true);
+		Detector.digest();
 	}
 }

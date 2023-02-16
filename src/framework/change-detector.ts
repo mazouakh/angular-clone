@@ -24,8 +24,6 @@ export class ChangeDetector {
 		this.bindings = this.bindings.filter((b) => !(b.element === element));
 		// Add the binding to the bindings list
 		this.bindings.push({ element, attrName, value });
-		console.table(this.bindings);
-		// console.log("Added binding on ", element.tagName, " to property ", attrName, " with value : ", value);
 	}
 
 	/**
@@ -33,6 +31,7 @@ export class ChangeDetector {
 	 */
 	digest() {
 		console.group("DIGESTING");
+		// Iterating through all the bindings
 		while (this.bindings.length > 0) {
 			const binding = this.bindings.pop();
 			// only update the value if it is different from the current one
@@ -40,10 +39,11 @@ export class ChangeDetector {
 				continue;
 			}
 			console.log("binding on : ", binding.element.tagName, " to property ", binding.attrName, " with value : ", binding.value);
+			// updating the value
 			set(binding.element, binding.attrName, binding.value);
 		}
 		console.groupEnd();
 	}
 }
-
+// exporting an instance of the ChangeDetector
 export const Detector = new ChangeDetector();

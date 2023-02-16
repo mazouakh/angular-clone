@@ -53,18 +53,17 @@ export class Framework {
 							// so first we update the property value in the directive instance
 							// as it was intended in the initial call
 							target[propName] = value;
-
-							// check if we have a bindings array
-							if (!directive.bindings) {
+							// check if we have a bindings array in the directive instance
+							if (!target.bindings) {
 								return true;
 							}
 							// check if that bindings array contains this property
-							const binding = directive.bindings.find((binding) => binding.propName === propName);
+							const binding = target.bindings.find((binding) => binding.propName === propName);
 							if (!binding) {
 								return true;
 							}
+							console.log("[Proxy] changes are being applied to : ", target.element, " for property : " + propName + " to new value : " + value);
 							// if it does, then we have a change
-							console.log("Proxy detected a change on ", target.element.tagName, " for property : " + propName + " to new value : " + value);
 							// We send this new value as a binding to the change detector
 							// and let him handle filtering and applying the most recent changes
 							Detector.addBinding(target.element, binding.attrName, value);
