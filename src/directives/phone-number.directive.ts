@@ -34,12 +34,10 @@ export class PhoneNumberDirective {
 	// create a function that formats the phone number in the input field.
 	formatPhoneNumber(newValue: string) {
 		this.inputValue = this.formatter.formatNumber(newValue, 10, 2, this.willHaveSpaces);
-		Detector.digest();
 	}
 
 	@HostListener("click")
 	onclick() {
 		this.borderColor = "red";
-		Detector.digest();
 	}
 }

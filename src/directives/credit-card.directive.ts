@@ -23,6 +23,5 @@ export class CreditCardDirective {
 	@HostListener("input", ["event.target.value"])
 	formatCreditCardNumber(value: string) {
 		this.inputValue = this.formatter.formatNumber(value, 16, 4, true);
-		Detector.digest();
 	}
 }
