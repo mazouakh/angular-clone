@@ -1,6 +1,6 @@
-import set from "lodash/set";
 import { Detector } from "./change-detector";
 import { Module, Providers, ServicesInstances } from "./types";
+import { NgZone } from "./zone";
 
 export class Framework {
 	constructor() {}
@@ -30,50 +30,57 @@ export class Framework {
 	 */
 
 	/**
-	 *Intanciate all directives and plug them into the targeted HTML elements
+	 * Instantiate all directives and plug them into the targeted HTML elements
+	 * @param metadata An object containing a list of 'declarations' of the directives that will be used in the app
+	 * and a list of their 'providers' if necessary.
 	 */
 	bootstrapApplication(metadata: Module) {
+		// getting the directives and providers from the metadata passed from app.ts
 		this.providers = metadata.providers || [];
 		this.directives = metadata.declarations;
-		this.directives.forEach((directive) => {
-			// select all HTML elements on the page that have as an attribute the directive's selector
-			const elements = document.querySelectorAll<HTMLElement>(directive.selector);
-			if (elements.length > 0) {
-				elements.forEach((element) => {
-					// On analyse les paramètres du constructeur de la directive et
-					// on les récupère
-					const params = this.analyseDirectiveConstructor(directive, element);
-					// Using the Reflect API, create a new instance of the directive and pass the appropriate parameters
-					const directiveInstance: any = Reflect.construct(directive, params);
 
-					// Creating a proxy to the directive to track all the changes
-					const directiveProxy: any = new Proxy(directiveInstance, {
-						set: (target, propName: string, value) => {
-							// The proxy intercepts all the changes to the target object (they don"t happen)
-							// so first we update the property value in the directive instance
-							// as it was intended in the initial call
-							target[propName] = value;
-							// check if we have a bindings array in the directive instance
-							if (!target.bindings) {
+		// starting a new zone that will intercept all function calls and calls Detector.digest() at the end of them
+		NgZone.run(() => {
+			// Iterating over all the declared directives and plugin them into the targeted HTML elements
+			this.directives.forEach((directive) => {
+				// select all HTML elements on the page that have as an attribute the directive's selector
+				const elements = document.querySelectorAll<HTMLElement>(directive.selector);
+				if (elements.length > 0) {
+					elements.forEach((element) => {
+						// On analyse les paramètres du constructeur de la directive et
+						// on les récupère
+						const params = this.analyseDirectiveConstructor(directive, element);
+						// Using the Reflect API, create a new instance of the directive and pass the appropriate parameters
+						const directiveInstance: any = Reflect.construct(directive, params);
+						// Creating a proxy to the directive to track all the changes
+						const directiveProxy: any = new Proxy(directiveInstance, {
+							set: (target, propName: string, value) => {
+								// The proxy intercepts all the changes to the target object (they don"t happen)
+								// so first we update the property value in the directive instance
+								// as it was intended in the initial call
+								target[propName] = value;
+								// check if we have a bindings array in the directive instance
+								if (!target.bindings) {
+									return true;
+								}
+								// check if that bindings array contains this property
+								const binding = target.bindings.find((binding) => binding.propName === propName);
+								if (!binding) {
+									return true;
+								}
+								console.log("[Proxy] changes are being applied to : ", target.element, " for property : " + propName + " to new value : " + value);
+								// if it does, then we have a change
+								// We send this new value as a binding to the change detector
+								// and let him handle filtering and applying the most recent changes
+								Detector.addBinding(target.element, binding.attrName, value);
 								return true;
-							}
-							// check if that bindings array contains this property
-							const binding = target.bindings.find((binding) => binding.propName === propName);
-							if (!binding) {
-								return true;
-							}
-							console.log("[Proxy] changes are being applied to : ", target.element, " for property : " + propName + " to new value : " + value);
-							// if it does, then we have a change
-							// We send this new value as a binding to the change detector
-							// and let him handle filtering and applying the most recent changes
-							Detector.addBinding(target.element, binding.attrName, value);
-							return true;
-						},
+							},
+						});
+						// then call the init function
+						directiveProxy.init();
 					});
-					// then call the init function
-					directiveProxy.init();
-				});
-			}
+				}
+			});
 		});
 	}
 
