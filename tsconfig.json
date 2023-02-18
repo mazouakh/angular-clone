@@ -3,5 +3,10 @@
 		"experimentalDecorators": true,
 		"lib": ["ES2015", "DOM"],
 		"esModuleInterop": true
+	},
+	"typedocOptions": {
+		"entryPoints": ["src/*.ts", "src/**/*.ts"],
+
+		"out": "docs"
 	}
 }
