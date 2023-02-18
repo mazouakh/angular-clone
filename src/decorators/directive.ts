@@ -1,4 +1,4 @@
-import { Directive } from "../framework/types";
+import { DirectiveMetaData } from "../framework/types";
 
 /**
  * Class Decorator @Directive : Marks a class as a directive and modifies it before returning it.
@@ -6,7 +6,7 @@ import { Directive } from "../framework/types";
  * @param Metadata The selector and providers? of the directive.
  * @returns A decorated class containing the selector and providers as static properties.
  */
-export function Directive(Metadata: Directive) {
+export function Directive(Metadata: DirectiveMetaData) {
 	/**
 	 * A decorator is a function that needs to return a function
 	 * the returned function takes as a parameter the original class the decorator is applied to

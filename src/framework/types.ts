@@ -21,6 +21,9 @@ export type Provider = {
  */
 export type Providers = Provider[];
 
+/**
+ * A service that will be injected when needed
+ */
 export type Service = {
 	/**
 	 * The name of the service
@@ -38,9 +41,13 @@ export type Service = {
  */
 export type ServicesInstances = Service[];
 
+/**
+ * A module is a list of directives in their providers that will be created
+ * when the application is bootstrapped
+ */
 export type Module = {
 	/**
-	 * List of directives classes to be instanciated and pluged
+	 * List of directives classes to be instantiated and plugged
 	 */
 	declarations: any[];
 	/**
@@ -49,7 +56,10 @@ export type Module = {
 	providers?: Providers;
 };
 
-export type Directive = {
+/**
+ * An object that contains all the necessary parameters in order to construct a directive
+ */
+export type DirectiveMetaData = {
 	/**
 	 * The selector of the directive
 	 */
@@ -59,4 +69,31 @@ export type Directive = {
 	 * The providers needed to construct the parameters of the directive
 	 */
 	providers?: Providers;
+};
+
+/**
+ * An object that contains all the necessary parameters in order to construct a component
+ */
+export type ComponentMetaData = {
+	/**
+	 * The selector of the Component
+	 */
+	selector: string;
+
+	/**
+	 * The providers needed to construct the parameters of the component
+	 */
+	providers?: Providers;
+
+	/**
+	 * The HTML template of the component.
+	 *
+	 * HTML elements can take dynamic values using interpolation
+	 * Example: <h1>{{title}}</h1>
+	 *
+	 * Events can also be bound to the HTML elements using the following convention.
+	 * Example: <h1 (click)="callThisFunction()" (dblclick)="onDblClick()">{{title}}</h1>
+	 *
+	 */
+	template: string;
 };

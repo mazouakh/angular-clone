@@ -30,7 +30,6 @@ export class ChangeDetector {
 	 * Apply all the changes that have been detected and filtered so far.
 	 */
 	digest() {
-		console.group("DIGESTING");
 		// Iterating through all the bindings
 		while (this.bindings.length > 0) {
 			const binding = this.bindings.pop();
@@ -38,11 +37,9 @@ export class ChangeDetector {
 			if (binding.value === get(binding.element, binding.attrName)) {
 				continue;
 			}
-			console.log("binding on : ", binding.element.tagName, " to property ", binding.attrName, " with value : ", binding.value);
 			// updating the value
 			set(binding.element, binding.attrName, binding.value);
 		}
-		console.groupEnd();
 	}
 }
 // exporting an instance of the ChangeDetector

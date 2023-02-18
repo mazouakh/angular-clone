@@ -68,7 +68,6 @@ export class Framework {
 								if (!binding) {
 									return true;
 								}
-								console.log("[Proxy] changes are being applied to : ", target.element, " for property : " + propName + " to new value : " + value);
 								// if it does, then we have a change
 								// We send this new value as a binding to the change detector
 								// and let him handle filtering and applying the most recent changes
