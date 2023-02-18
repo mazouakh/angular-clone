@@ -1,6 +1,6 @@
 import { CreditCardDirective } from "./directives/credit-card.directive";
 import { PhoneNumberDirective } from "./directives/phone-number.directive";
-import { UserProfileDirective } from "./directives/user-profile.directive";
+import { UserProfileComponent } from "./components/user-profile.component";
 import { Angular } from "./framework/framework";
 import { FormatterService } from "./services/formatter.service";
 
@@ -11,5 +11,5 @@ Angular.bootstrapApplication({
 			construct: () => new FormatterService("generic formatter"),
 		},
 	],
-	declarations: [CreditCardDirective, PhoneNumberDirective, UserProfileDirective],
+	declarations: [CreditCardDirective, PhoneNumberDirective, UserProfileComponent],
 });
